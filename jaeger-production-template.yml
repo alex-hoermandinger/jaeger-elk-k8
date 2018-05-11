@@ -70,7 +70,8 @@ items:
       targetPort: 9411
     selector:
       jaeger-infra: collector-pod
-    type: ClusterIP
+    #type: ClusterIP
+    type: LoadBalancer
 - apiVersion: extensions/v1beta1
   kind: Deployment
   metadata:
