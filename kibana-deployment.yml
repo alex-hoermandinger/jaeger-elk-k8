@@ -1,0 +1,35 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: kibana
+  labels:
+    app: jaeger
+    jaeger-infra: kibana-deployment
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: jaeger-kibana
+        jaeger-infra: kibana-replica
+    spec:
+      # FIXME
+      # healthcheck + resources
+      containers:
+      - name: kibana
+        image: docker.elastic.co/kibana/kibana:6.2.4
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5601
+        resources: {}
+        volumeMounts:
+        - name: config
+          mountPath: /usr/share/kibana/kibana.yml
+          subPath: kibana.yml
+      restartPolicy: Always
+      volumes:
+      - name: config
+        configMap:
+          name: kibana

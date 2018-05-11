@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: logstash
+  labels:
+    app: jaeger
+    jaeger-infra: logstash-service
+spec:
+  type: LoadBalancer
+  ports:
+  - name: "ui"
+    port: 5044
+    targetPort: 5044
+  selector:
+    app: jaeger-logstash
+    

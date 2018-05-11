@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jaeger-configuration
+  labels:
+    app: jaeger
+    jaeger-infra: configuration
+data:
+  elasticsearch.yml: |
+    network :
+      host : 0.0.0.0
+    cluster.name: opentrace
+    path.data: /usr/share/elasticsearch/data/data1/,/usr/share/elasticsearch/data/data2/
+    path.repo: [/usr/share/elasticsearch/backup_els/]
+    path.logs: /usr/share/elasticsearch/logs/
+    discovery.type: single-node
+    discovery.zen.ping.unicast.hosts: ["0.0.0.0"]
+    discovery.zen.minimum_master_nodes: 1
+    indices.fielddata.cache.size: 40%
+    xpack.security.enabled: false    
+  span-storage-type: elasticsearch
+  collector: |
+    es:
+      server-urls: http://elasticsearch:9200
+    collector:
+      zipkin:
+        http-port: 9411
+  query: |
+    es:
+      server-urls: http://elasticsearch:9200
+    query:
+      static-files: /go/jaeger-ui/
+  agent: |
+    collector:
+      host-port: "jaeger-collector:14267"
