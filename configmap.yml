@@ -6,6 +6,7 @@ metadata:
     app: jaeger
     jaeger-infra: configuration
 data:
+  elasticsearch_version: 6.2.4
   elasticsearch.yml: |
     network :
       host : 0.0.0.0
@@ -33,3 +34,34 @@ data:
   agent: |
     collector:
       host-port: "jaeger-collector:14267"
+  kibana.yml: |
+    server:
+      name: "tracing-kibana"
+      port: 127.0.0.1:5601
+    elasticsearch.url: "http://elasticsearch:9200"
+  logstash_pipeline_port: 5044
+  logstash.yml: |
+    http.host: "0.0.0.0"
+    path.config: /usr/share/logstash/pipeline
+    config.reload.automatic: true
+    ## Disable X-Pack
+    ## see https://www.elastic.co/guide/en/x-pack/current/xpack-settings.html
+    xpack.monitoring.enabled: false
+  logstash.conf: |
+    input {
+      tcp {
+        port => 5044
+      }
+    }
+    filter {
+      json {
+        source => "message"
+      }
+    }
+    output {
+      elasticsearch {
+       hosts => ["elasticsearch:9200"]
+       index => "mma-%{+YYYY-MM-dd}-logstash"
+      }
+    }
+

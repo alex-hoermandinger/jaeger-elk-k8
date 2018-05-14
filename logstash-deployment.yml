@@ -20,7 +20,15 @@ spec:
         - containerPort: 5044
         env:
         - name: ES_VERSION
-          value: 5.6.0
+           valueFrom:
+              configMapKeyRef:
+                name: jaeger-configuration
+                key: elasticsearch_version
+        - name: LOGSTASH_PIPELINE_PORT
+           valueFrom:
+              configMapKeyRef:
+                name: jaeger-configuration
+                key: logstash_pipeline_port
         volumeMounts:
           - name: config-volume
             mountPath: /usr/share/logstash/config
@@ -36,13 +44,13 @@ spec:
       volumes:
       - name: config-volume
         configMap:
-          name: logstash
+          name: jaeger-configuration
           items:
             - key: logstash.yml
               path: logstash.yml
       - name: logstash-pipeline-volume
         configMap:
-          name: logstash
+          name: jaeger-configuration
           items:
             - key: logstash.conf
               path: logstash.conf

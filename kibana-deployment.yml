@@ -19,7 +19,7 @@ spec:
       # healthcheck + resources
       containers:
       - name: kibana
-        image: docker.elastic.co/kibana/kibana:6.2.4
+        image: alfranzis/kibana-ext:6.2.3
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 5601
@@ -32,4 +32,4 @@ spec:
       volumes:
       - name: config
         configMap:
-          name: kibana
+          name: jaeger-configuration
