@@ -39,7 +39,7 @@ data:
       name: "tracing-kibana"
       port: 127.0.0.1:5601
     elasticsearch.url: "http://elasticsearch:9200"
-  logstash_pipeline_port: 5044
+  logstash_pipeline_port: "5044"
   logstash.yml: |
     http.host: "0.0.0.0"
     path.config: /usr/share/logstash/pipeline
@@ -64,4 +64,5 @@ data:
        index => "mma-%{+YYYY-MM-dd}-logstash"
       }
     }
+
 
