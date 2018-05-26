@@ -7,6 +7,7 @@ metadata:
     jaeger-infra: logstash-service
 spec:
   type: LoadBalancer
+  #loadBalancerIP: "<ip>"
   ports:
   - name: "ui"
     port: 5044
